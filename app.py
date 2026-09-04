@@ -41,7 +41,14 @@ def reply_message(reply_token, text):
         ]
     }
 
-    requests.post(url, headers=headers, json=data)
+    response = requests.post(
+        url,
+        headers=headers,
+        json=data
+    )
+
+    print("LINE返信ステータス:", response.status_code)
+    print("LINE返信結果:", response.text)
 
 
 @app.route("/")
@@ -56,11 +63,16 @@ def callback():
     signature = request.headers.get("X-Line-Signature", "")
 
     if not verify_signature(body, signature):
+        print("署名チェック失敗")
         abort(400)
 
     data = request.get_json()
 
+    print("LINEから受信:", data)
+
     for event in data.get("events", []):
+
+        print("イベント:", event)
 
         if event.get("type") != "message":
             continue
@@ -68,9 +80,13 @@ def callback():
         source = event.get("source", {})
         reply_token = event.get("replyToken")
 
+        print("送信元タイプ:", source.get("type"))
+
         if source.get("type") == "group":
 
             group_id = source.get("groupId")
+
+            print("グループID:", group_id)
 
             reply_message(
                 reply_token,
