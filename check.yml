@@ -1,0 +1,16 @@
+name: Reminder Check
+
+on:
+  schedule:
+    - cron: '* * * * *'
+
+  workflow_dispatch:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check reminders
+        run: |
+          curl -sS https://rimainkun.onrender.com/check
