@@ -400,7 +400,7 @@ def check_reminders():
 
 
         message = (
-            "🔔 リマインド\n\n"
+            "🔔 颯太予定\n\n"
             + reminder_text
         )
 
